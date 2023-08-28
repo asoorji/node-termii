@@ -3,13 +3,18 @@ const accountSid = process.env.ACCOUNT_SID;
 const authToken = process.env.AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 
-console.log('token', process.env.ACCOUNT_SID)
-console.log('token', process.env.AUTH_TOKEN)
+const messageText = 'Votar notifs!'; 
 
-client.messages
-    .create({
-        body: 'I will not be small',
-        from: 'whatsapp:+14155238886',
-        to: 'whatsapp:+2348129976178'
-    })
-    .then(message => console.log(message.sid))
+const recipients = [
+    '+2348129976178', '+16145722962', 
+  ];
+
+recipients.forEach(recipient => {
+  client.messages.create({
+    body: messageText,
+    from: 'whatsapp:+14155238886',
+    to: 'whatsapp:' + recipient
+  })
+  .then(message => console.log(`Message sent to ${recipient}: ${message.sid}`))
+  .catch(error => console.error(`Error sending message to ${recipient}: ${error.message}`));
+});
