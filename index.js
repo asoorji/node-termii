@@ -1,20 +1,23 @@
 require('dotenv').config()
-const accountSid = process.env.ACCOUNT_SID;
-const authToken = process.env.AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
+var request = require('request');
+var data = {
+        "to": "+2348144092733",
+        "from": "Orji",
+        "sms": "VotarHQ Testing",
+        "type": "plain",
+        "channel": "generic",
+        "api_key": process.env.API_KEY,
+};
+var options = {
+'method': 'POST',
+'url': 'https://termii.com/api/sms/send',
+'headers': {
+'Content-Type': ['application/json', 'application/json']
+},
+body: JSON.stringify(data)
 
-const messageText = 'Votar notifs!'; 
-
-const recipients = [
-    '+2348129976178', '+16145722962', 
-  ];
-
-recipients.forEach(recipient => {
-  client.messages.create({
-    body: messageText,
-    from: 'whatsapp:+14155238886',
-    to: 'whatsapp:' + recipient
-  })
-  .then(message => console.log(`Message sent to ${recipient}: ${message.sid}`))
-  .catch(error => console.error(`Error sending message to ${recipient}: ${error.message}`));
+};
+request(options, function (error, response) {
+if (error) throw new Error(error);
+console.log(response.body);
 });
